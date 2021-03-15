@@ -58,14 +58,15 @@ class AscentSystem(ExplicitComponent):
         vex = self.options['vex']
         w2 = self.options['w2']
         T = self.options['T']
+        #m_scale = self.options['m_scale']
 
         outputs['drx_dt'] = inputs['Vx']
         outputs['dry_dt'] = inputs['Vy']
         outputs['drz_dt'] = inputs['Vz']
-        outputs['dVx_dt'] = - w2*inputs['rx'] + (T * inputs['ux']) / (inputs['m'] * g0)
-        outputs['dVy_dt'] = - w2*inputs['ry'] + (T * inputs['uy']) / (inputs['m'] * g0)
-        outputs['dVz_dt'] = - w2*inputs['rz'] + (T * inputs['uz']) / (inputs['m'] * g0)
-        outputs['dm_dt'] = - (T / vex) * np.sqrt(R0/g0)
+        outputs['dVx_dt'] = - w2*inputs['rx'] + (T * inputs['ux']) / (inputs['m'] * g0) # * m_scale
+        outputs['dVy_dt'] = - w2*inputs['ry'] + (T * inputs['uy']) / (inputs['m'] * g0) # * m_scale
+        outputs['dVz_dt'] = - w2*inputs['rz'] + (T * inputs['uz']) / (inputs['m'] * g0) # * m_scale
+        outputs['dm_dt'] = - ((T / vex) * np.sqrt(R0/g0)) #/ m_scale
 
     def compute_partials(self, inputs, partials):
         g0 = self.options['g0']
@@ -84,9 +85,9 @@ class AscentSystem(ExplicitComponent):
         partials['dVx_dt', 'rx'] = - w2
         partials['dVy_dt', 'ry'] = - w2
         partials['dVz_dt', 'rz'] = - w2
-        partials['dVx_dt', 'ux'] = T / (m * g0)
-        partials['dVy_dt', 'uy'] = T / (m * g0)
-        partials['dVz_dt', 'uz'] = T / (m * g0)
-        partials['dVx_dt', 'm'] = - (T * ux) / (m**2 * g0)
-        partials['dVy_dt', 'm'] = - (T * uy) / (m**2 * g0)
-        partials['dVz_dt', 'm'] = - (T * uz) / (m**2 * g0)
+        partials['dVx_dt', 'ux'] = T / (m * g0) # * m_scale
+        partials['dVy_dt', 'uy'] = T / (m * g0) # * m_scale
+        partials['dVz_dt', 'uz'] = T / (m * g0) # * m_scale
+        partials['dVx_dt', 'm'] = - (T * ux) / (m**2 * g0) # * m_scale
+        partials['dVy_dt', 'm'] = - (T * uy) / (m**2 * g0) # * m_scale
+        partials['dVz_dt', 'm'] = - (T * uz) / (m**2 * g0) # * m_scale

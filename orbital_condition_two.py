@@ -42,7 +42,7 @@ class OrbitalConditionTwo(ExplicitComponent):
         r = [rx, ry, rz]
         V = [Vx, Vy, Vz]
 
-        outputs['C2'] = linalg.norm(V,2)/2 - 1/linalg.norm(r,2) + 1/(2*a)
+        outputs['C2'] = linalg.norm(V,2)**2/2. - 1./linalg.norm(r,2) + 1./(2*a)
 
     def compute_partials(self,inputs,partials):
 
@@ -68,6 +68,6 @@ class OrbitalConditionTwo(ExplicitComponent):
         partials['C2','rx'] = dnorm_r_drx / norm_r ** 2
         partials['C2','ry'] = dnorm_r_dry / norm_r ** 2
         partials['C2','rz'] = dnorm_r_drz / norm_r ** 2
-        partials['C2','Vx'] = dnorm_V_dVx / 2
-        partials['C2','Vy'] = dnorm_V_dVy / 2
-        partials['C2','Vz'] = dnorm_V_dVz / 2
+        partials['C2','Vx'] = Vx
+        partials['C2','Vy'] = Vy
+        partials['C2','Vz'] = Vz

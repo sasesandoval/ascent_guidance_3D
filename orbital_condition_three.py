@@ -45,7 +45,8 @@ class OrbitalConditionThree(ExplicitComponent):
         z = [0, 0, 1]
 
         #outputs['C3'] = np.dot(z,rxV) - linalg.norm(rxV,2)*np.cos(inc)
-        outputs['C3'] = rx*Vy - ry*Vx - np.cos(inc)*(np.absolute(rx*Vy - ry*Vx)**2 + np.absolute(rx*Vz - rz*Vx)**2 + np.absolute(ry*Vz - rz*Vy)**2)**(1/2)
+        outputs['C3'] = rx*Vy - ry*Vx - np.cos(inc)*((rx*Vy - ry*Vx)**2 \
+            + (rx*Vz - rz*Vx)**2 + (ry*Vz - rz*Vy)**2)**(0.5)
 
     def compute_partials(self,inputs,partials):
         inc = self.options['inc']
@@ -65,14 +66,14 @@ class OrbitalConditionThree(ExplicitComponent):
 
         C = np.cos(inc)
 
-        du_drx =-C*(2*Vy*np.absolute(rx*Vy-ry*Vx)*np.sign(rx*Vy-ry*Vx) + 2*Vz*np.absolute(rx*Vz-rz*Vx)*np.sign(rx*Vz-rz*Vx))
-        du_dry = C*(2*Vx*np.absolute(rx*Vy-ry*Vx)*np.sign(rx*Vy-ry*Vx) - 2*Vz*np.absolute(ry*Vz-rz*Vy)*np.sign(ry*Vz-rz*Vy))
-        du_drz = C*(2*Vx*np.absolute(rx*Vz-rz*Vx)*np.sign(rx*Vz-rz*Vx) + 2*Vy*np.absolute(ry*Vz-rz*Vy)*np.sign(ry*Vz-rz*Vy))
-        du_dVx = C*(2*ry*np.absolute(rx*Vy-ry*Vx)*np.sign(rx*Vy-ry*Vx) + 2*rz*np.absolute(rx*Vz-rz*Vx)*np.sign(rx*Vz-rz*Vx))
-        du_dVy =-C*(2*rx*np.absolute(rx*Vy-ry*Vx)*np.sign(rx*Vy-ry*Vx) - 2*rz*np.absolute(ry*Vz-rz*Vy)*np.sign(ry*Vz-rz*Vy))
-        du_dVz =-C*(2*rx*np.absolute(rx*Vz-rz*Vx)*np.sign(rx*Vz-rz*Vx) + 2*ry*np.absolute(ry*Vz-rz*Vy)*np.sign(ry*Vz-rz*Vy))
+        du_drx =-C*(2*Vy*(rx*Vy-ry*Vx) + 2*Vz*(rx*Vz-rz*Vx))
+        du_dry = C*(2*Vx*(rx*Vy-ry*Vx) - 2*Vz*(ry*Vz-rz*Vy))
+        du_drz = C*(2*Vx*(rx*Vz-rz*Vx) + 2*Vy*(ry*Vz-rz*Vy))
+        du_dVx = C*(2*ry*(rx*Vy-ry*Vx) + 2*rz*(rx*Vz-rz*Vx))
+        du_dVy =-C*(2*rx*(rx*Vy-ry*Vx) - 2*rz*(ry*Vz-rz*Vy))
+        du_dVz =-C*(2*rx*(rx*Vz-rz*Vx) + 2*ry*(ry*Vz-rz*Vy))
 
-        den = 2*((np.absolute(rx*Vy - ry*Vx)**2 + np.absolute(rx*Vz - rz*Vx)**2 + np.absolute(ry*Vz - rz*Vy)**2)**(1/2))
+        den = 2*(((rx*Vy - ry*Vx)**2 + (rx*Vz - rz*Vx)**2 + (ry*Vz - rz*Vy)**2)**(1/2))
 
         partials['C3','rx'] = du_drx/den + Vy
         partials['C3','ry'] = du_dry/den - Vx
