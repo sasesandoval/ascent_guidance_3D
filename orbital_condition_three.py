@@ -5,11 +5,9 @@ from openmdao.api import ExplicitComponent
 class OrbitalConditionThree(ExplicitComponent):
 
     def initialize(self):
-        #self.options.declare('num_nodes', default=1, types=int)
         self.options.declare('inc', default=1., types=float)
 
     def setup(self):
-        #num = self.options['num_nodes']
         inc = self.options['inc']
 
         self.add_input('rx', shape=1)
@@ -81,19 +79,3 @@ class OrbitalConditionThree(ExplicitComponent):
         partials['C3','Vx'] = du_dVx/den - ry
         partials['C3','Vy'] = du_dVy/den + rx
         partials['C3','Vz'] = du_dVz/den
-
-        # norm_rxV = np.sqrt((ry*Vz-rz*Vy)**2 + (rz*Vx-rx*Vz)**2 + (rx*Vy-ry*Vx)**2)
-        #
-        # du_drx = (rz*Vx-rx*Vz)*(-Vz) + (rx*Vy-ry*Vx)*(Vy)
-        # du_dry = (ry*Vz-rz*Vy)*(Vz) + (rx*Vy-ry*Vx)*(-Vx)
-        # du_drz = (ry*Vz-rz*Vy)*(-Vy) + (rz*Vx-rx*Vz)*(Vx)
-        # du_dVx = (rz*Vx-rx*Vz)*(rz) + (rx*Vy-ry*Vx)*(-ry)
-        # du_dVy = (ry*Vz-rz*Vy)*(-rz) + (rx*Vy-ry*Vx)*(rx)
-        # du_dVz = (ry*Vz-rz*Vy)*(ry) + (rz*Vx-rx*Vz)*(-rx)
-        #
-        # partials['C3','rx'] = (1./norm_rxV) * du_drx * np.cos(inc) + Vy
-        # partials['C3','ry'] = (1./norm_rxV) * du_dry * np.cos(inc) - Vx
-        # partials['C3','rz'] = (1./norm_rxV) * du_drz * np.cos(inc) + 0.
-        # partials['C3','Vx'] = (1./norm_rxV) * du_dVx * np.cos(inc) - ry
-        # partials['C3','Vy'] = (1./norm_rxV) * du_dVy * np.cos(inc) + rx
-        # partials['C3','Vz'] = (1./norm_rxV) * du_dVz * np.cos(inc) + 0.

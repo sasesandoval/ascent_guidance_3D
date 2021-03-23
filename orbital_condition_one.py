@@ -4,12 +4,10 @@ from openmdao.api import ExplicitComponent
 class OrbitalConditionOne(ExplicitComponent):
 
     def initialize(self):
-        #self.options.declare('num_nodes', default=1, types=int)
         self.options.declare('a', default=1., types=float)
         self.options.declare('ecc', default=1., types=float)
 
     def setup(self):
-        #num = self.options['num_nodes']
         a = self.options['a']
         ecc = self.options['ecc']
 

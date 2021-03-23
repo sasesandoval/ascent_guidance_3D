@@ -5,11 +5,9 @@ from openmdao.api import ExplicitComponent
 class OrbitalConditionTwo(ExplicitComponent):
 
     def initialize(self):
-        #self.options.declare('num_nodes', default=1, types=int)
         self.options.declare('a', default=1., types=float)
 
     def setup(self):
-        #num = self.options['num_nodes']
         a = self.options['a']
 
         self.add_input('rx', shape=1)

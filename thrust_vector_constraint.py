@@ -32,8 +32,6 @@ class ThrustVectorConstraint(ExplicitComponent):
         #outputs['CT'] = linalg.norm(u,2) - 1.
         # outputs['CT'] = np.sqrt(ux**2 + uy**2 + uz**2)
         outputs['CT'] = ux**2 + uy**2 + uz**2
-        print(ux**2 + uy**2 + uz**2)
-        print('-'*40)
 
     def compute_partials(self,inputs,partials):
 
